@@ -4,7 +4,7 @@
   "description": "End-to-end testing of the panda website",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:e2e": "playwright test --config=e2e.config.ts --project=Chromium --headed"
   },
   "author": "Frank",
   "license": "ISC",
