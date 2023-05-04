@@ -6,7 +6,7 @@ const config: PlaywrightTestConfig = {
   timeout: 60000,
 
   // Enable test retries with a maximum of 3 retries
-  retries: 3,
+  retries: 0,
 
   // Set the directory where test files are located
   testDir: "tests/e2e",
