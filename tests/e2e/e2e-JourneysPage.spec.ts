@@ -16,6 +16,8 @@ test.describe.only("Testing of the rendering of the Journeyspage", () => {
     test("Checking the data in the table", async () => {
         await journeysPage.checkTablesContent()
       });
+
+      
    
   });
   
