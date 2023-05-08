@@ -15,11 +15,26 @@ export class StationListPage {
     
     }
   
-    async visitHomepage() {
+    async visitStationListPage() {
       await this.page.goto(
         "https://panda-helsinki-citybike-website.onrender.com/stationList"
       );
+      await this.page.waitForLoadState("networkidle");
     }
+
+    async checkTableElements() {
+    
+        const table = await this.page.waitForSelector(".ant-table");
+        const trCountHandle = await this.page.evaluateHandle((table) => {
+          const rows = table.querySelectorAll("tr");
+          return rows.length;
+        }, table);
+        
+        const trCount = await trCountHandle.jsonValue();
+    
+        
+        expect(trCount).toEqual(11);
+      }
   
 
   }
