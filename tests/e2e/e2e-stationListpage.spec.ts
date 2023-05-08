@@ -22,5 +22,10 @@ test.describe("Testing of the rendering of the station list page", () => {
     await stationListPage.checkTablesContent();
   });
 
+  
+  test("Check table content pagination and visual testing", async () => {
+    await stationListPage.checkTablePaging();
+  });
+
 });
   

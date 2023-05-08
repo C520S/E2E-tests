@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import fs from "fs";
-const folderPath = " JourneyPage-Test-Images";
+const folderPath = " journeyPage-Test-Images";
 
 export class Journeys {
   // define selectors
@@ -89,7 +89,7 @@ export class Journeys {
       // Wait for the table to update with new data
       await this.page.waitForTimeout(1000);
 
-      const screenshotPath = `${folderPath}/table_page_${pageNumber}.png`;
+      const screenshotPath = `${folderPath}/JourneysTable_page_${pageNumber}.png`;
       //Take a screenshot of the table for visual verification
       await table.screenshot({ path: screenshotPath });
     }
@@ -107,11 +107,11 @@ export class Journeys {
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath);
     }
-    await table.screenshot({ path: `${folderPath}/table_next_page.png` });
+    await table.screenshot({ path: `${folderPath}/JourneysTable_next_page.png` });
     // Click on the previous button
     await this.page.click(".ant-pagination-prev");
     await this.page.waitForTimeout(1000);
-    await table.screenshot({ path: `${folderPath}/table_previous_page.png` });
+    await table.screenshot({ path: `${folderPath}/JourneysTable_previous_page.png` });
   }
 
   async checkSearchResult(searchInpuut: string) {

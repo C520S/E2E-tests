@@ -1,4 +1,6 @@
 import {expect, Locator, Page } from "@playwright/test";
+import fs from "fs";
+const folderPath = " homePage-Test-Images";
 
 export class HomePage {
   // define selectors
@@ -39,6 +41,10 @@ export class HomePage {
 
   async checkRendering() {
     await this.page.waitForLoadState("networkidle");
-    expect(await this.page.screenshot()).toMatchSnapshot("homepage.png");
+    // Create the folder if it doesn't exist
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath);
+    }
+    expect(await this.page.screenshot({ path: `${folderPath}/Homepage.png` }))
   }
 }

@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import fs from "fs";
-const folderPath = " StationListPage-Test-Images";
+const folderPath = " stationListPage-Test-Images";
 
 
 export class StationListPage {
@@ -63,7 +63,35 @@ export class StationListPage {
          
         expect(tableDataContent).toEqual(expectedTableDataset);
       }
+      async checkTablePaging() {
     
+        const table = await this.page.waitForSelector(".ant-table");
+        // Get the pagination element
+        const pagination = await this.page.waitForSelector(".ant-pagination");
+        // Get the page numbers
+        const pageNumbers = await pagination.$$eval(
+          ".ant-pagination-item",
+          (elements) => elements.map((el) => el.textContent)
+        );
+    
+        // Create the folder if it doesn't exist
+        if (!fs.existsSync(folderPath)) {
+          fs.mkdirSync(folderPath);
+        }
+    
+        // Iterate through each page number and click on it
+        for (const pageNumber of pageNumbers) {
+          // Click on the page number
+          await this.page.click(`.ant-pagination-item[title="${pageNumber}"]`);
+    
+          // Wait for the table to update with new data
+          await this.page.waitForTimeout(1000);
+    
+          const screenshotPath = `${folderPath}/StationListTable_page_${pageNumber}.png`;
+          //Take a screenshot of the table for visual verification
+          await table.screenshot({ path: screenshotPath });
+        }
+      }
   
 
   }
