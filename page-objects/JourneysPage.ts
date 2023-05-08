@@ -6,12 +6,13 @@ export class Journeys {
   // define selectors
   readonly page: Page;
   readonly searchField: Locator;
-  // readonly backButton :Locator;
+  readonly backButton :Locator;
 
   // Init selectors using constructor
   constructor(page: Page) {
     this.page = page;
     this.searchField = page.locator("#my-search");
+    this.backButton = page.locator('text=back')
   }
 
   async visitJourneyspage() {
@@ -161,6 +162,15 @@ for (const pageNumber of pageNumbers) {
         expect(tableDataContent).toEqual(expectedTableDataset)
         
        
+  }
+
+  async checkBackButton(){
+    await this.page.waitForLoadState("networkidle");
+    await this.backButton.click();
+    const currentUrl = this.page.url();
+  
+    
+    expect(currentUrl).toBe('https://panda-helsinki-citybike-website.onrender.com/journeys');
   }
    
   
