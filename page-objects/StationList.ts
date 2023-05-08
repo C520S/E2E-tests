@@ -8,12 +8,14 @@ export class StationListPage {
     readonly page: Page;
     readonly searchField: Locator;
     readonly backButton: Locator;
-  
+    readonly stationName:Locator;
     // Init selectors using constructor
     constructor(page: Page) {
       this.page = page;
       this.searchField = page.locator("#my-search");
       this.backButton = page.locator("text=back");
+      this.stationName = page.locator("text=Golfpolku")
+      
     }
   
     async visitStationListPage() {
@@ -145,5 +147,29 @@ export class StationListPage {
       "https://panda-helsinki-citybike-website.onrender.com/stationList"
     );
   }
+
+  async checkSingleStationViewUrl(){
+    await this.stationName.click()
+    
+    const currentUrl = this.page.url();
+
+    expect(currentUrl).toBe(
+      "https://panda-helsinki-citybike-website.onrender.com/stationList/Golfpolku"
+    );
+
+  }
+
+  async checkSingleStationViewtitle(){
+    await this.stationName.click()
+    const pageTitle = this.page.locator('h1')
+    await expect(pageTitle).toHaveText(
+      "Station location on the map"
+    );
+
+    
+
+  }
+
+
   }
   

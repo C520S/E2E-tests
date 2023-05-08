@@ -35,8 +35,16 @@ test.describe("Testing of the rendering of the station list page", () => {
     await stationListPage.checkSearchResult("Golf");
   });
 
-  test.only("Checking the function of the return button", async () => {
+  test("Checking the function of the return button", async () => {
     await stationListPage.checkBackButton();
+  });
+
+  test('checking single station view url', async () => {
+    await stationListPage.checkSingleStationViewUrl()
+  });
+
+  test.only('checking single station view title', async () => {
+    await stationListPage.checkSingleStationViewUrl()
   });
 
 });
