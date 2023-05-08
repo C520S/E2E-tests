@@ -27,5 +27,9 @@ test.describe("Testing of the rendering of the station list page", () => {
     await stationListPage.checkTablePaging();
   });
 
+  test("Check table Next and previous button and visual testing", async () => {
+    await stationListPage.checkNextAndPreviousButton();
+  });
+
 });
   

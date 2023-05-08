@@ -92,7 +92,25 @@ export class StationListPage {
           await table.screenshot({ path: screenshotPath });
         }
       }
-  
+     
+  async checkNextAndPreviousButton() {
+   
+    const table = await this.page.waitForSelector(".ant-table");
+
+    // Click on the next button
+    await this.page.click(".ant-pagination-next");
+    await this.page.waitForTimeout(1000);
+
+    // Create the folder if it doesn't exist
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath);
+    }
+    await table.screenshot({ path: `${folderPath}/StationListTable_next_page.png` });
+    // Click on the previous button
+    await this.page.click(".ant-pagination-prev");
+    await this.page.waitForTimeout(1000);
+    await table.screenshot({ path: `${folderPath}/StationListTable_previous_page.png` });
+  }
 
   }
   
