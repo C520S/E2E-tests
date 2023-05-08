@@ -12,7 +12,8 @@ export class StationListPage {
     // Init selectors using constructor
     constructor(page: Page) {
       this.page = page;
-    
+      this.searchField = page.locator("#my-search");
+      this.backButton = page.locator("text=back");
     }
   
     async visitStationListPage() {
@@ -111,6 +112,30 @@ export class StationListPage {
     await this.page.waitForTimeout(1000);
     await table.screenshot({ path: `${folderPath}/StationListTable_previous_page.png` });
   }
+  async checkSearchResult(searchInpuut: string) {
+    await this.page.waitForLoadState("networkidle");
+    await this.searchField.type(searchInpuut);
+    const expectedTableDataset = ['Golfpolku 16 Espoo Golfstigen 3'];
+    // keybord event in playwrights
+    await this.page.keyboard.press("Enter");
+    // Wait for the table to update with new data
+    await this.page.waitForTimeout(3000);
+
+    const table = await this.page.waitForSelector(".ant-table");
+
+    //extract the table data from the rows and cells of the Ant Design table.
+    const tableData = await table.$$eval("tbody tr", (rows) =>
+      Array.from(rows, (row) =>
+        Array.from(row.querySelectorAll("td"), (cell) => cell.innerText.trim())
+      )
+    );
+
+    const tableDataContent = tableData.map((item) => item.join(" "));
+   
+    
+    expect(tableDataContent).toEqual(expectedTableDataset);
+  }
+
 
   }
   
