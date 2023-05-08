@@ -3,7 +3,7 @@ import { Journeys } from "../../page-objects/JourneysPage";
 
 
 
-test.describe.only("Testing of the rendering of the Journeyspage", () => {
+test.describe.parallel("Testing of the rendering of the Journeyspage", () => {
     //ilnitialize thejourneysPage
     let journeysPage:Journeys;
     
@@ -11,13 +11,23 @@ test.describe.only("Testing of the rendering of the Journeyspage", () => {
      journeysPage = new Journeys(page);
       await journeysPage.visitJourneyspage()
     });
-  
+    test("Check if the table has 16 rows", async () => {
+        await journeysPage.checkTableElements()
+      });
+
    
     test("Checking the data in the table", async () => {
         await journeysPage.checkTablesContent()
       });
 
-      
+      test("Check table content pagination and visual testing", async () => {
+        await journeysPage.checkTablePaging()
+      });
+      test("Check table Next and previous button and visual testing", async () => {
+        await journeysPage.checkNextAndPreviousButton()
+      });
+
+
    
   });
   

@@ -1,4 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
+import fs from 'fs';
+const folderPath = ' JourneyPage-Test-Images';
 
 export class Journeys {
   // define selectors
@@ -16,6 +18,20 @@ export class Journeys {
     await this.page.goto(
       "https://panda-helsinki-citybike-website.onrender.com/journeys"
     );
+  }
+
+  async checkTableElements (){
+    await this.page.waitForLoadState("networkidle");
+    const table = await this.page.waitForSelector(".ant-table");
+    const trCountHandle = await this.page.evaluateHandle(table => {
+        const rows = table.querySelectorAll('tr');
+        return rows.length;
+      }, table);
+      const trCount = await trCountHandle.jsonValue()
+      expect(trCount).toEqual(16)
+      
+      
+
   }
 
   async checkTablesContent() {
@@ -49,10 +65,63 @@ export class Journeys {
     );
  
     const tableDataContent = tableData.map(item => item.join(' '));
-    console.log(tableDataContent);
+   
     
     expect(tableDataContent).toEqual(expectedTableDataset)
     
 
   }
+
+  async  checkTablePaging (){
+    await this.page.waitForLoadState("networkidle");
+    const table = await this.page.waitForSelector('.ant-table');
+    // Get the pagination element
+    const pagination = await this.page.waitForSelector('.ant-pagination');
+    // Get the page numbers
+    const pageNumbers = await pagination.$$eval('.ant-pagination-item', elements => elements.map(el => el.textContent));
+
+    // Create the folder if it doesn't exist
+    if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath);
+    }
+  
+
+    // Iterate through each page number and click on it
+for (const pageNumber of pageNumbers) {
+   // Click on the page number
+    await this.page.click(`.ant-pagination-item[title="${pageNumber}"]`);
+  
+   // Wait for the table to update with new data
+    await this.page.waitForTimeout(1000); 
+
+    const screenshotPath = `${folderPath}/table_page_${pageNumber}.png`;
+    //Take a screenshot of the table for visual verification
+    await table.screenshot({ path: screenshotPath });
+  }
+
+  }
+
+  async checkNextAndPreviousButton(){
+    
+    await this.page.waitForLoadState("networkidle");
+    const table = await this.page.waitForSelector('.ant-table');
+
+    // Click on the next button
+    await this.page.click('.ant-pagination-next');
+    await this.page.waitForTimeout(1000); 
+
+    // Create the folder if it doesn't exist
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath);
+      }
+    await table.screenshot({ path: `${folderPath}/table_next_page.png` });
+      // Click on the previous button
+   await this.page.click('.ant-pagination-prev');
+   await this.page.waitForTimeout(1000);
+   await table.screenshot({ path: `${folderPath}/table_previous_page.png` });
+  }
+
+  
+  
+
 }
