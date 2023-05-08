@@ -19,10 +19,11 @@ export class Journeys {
     await this.page.goto(
       "https://panda-helsinki-citybike-website.onrender.com/journeys"
     );
+    await this.page.waitForLoadState("networkidle");
   }
 
   async checkTableElements() {
-    await this.page.waitForLoadState("networkidle");
+    
     const table = await this.page.waitForSelector(".ant-table");
     const trCountHandle = await this.page.evaluateHandle((table) => {
       const rows = table.querySelectorAll("tr");
@@ -33,7 +34,7 @@ export class Journeys {
   }
 
   async checkTablesContent() {
-    await this.page.waitForLoadState("networkidle");
+    
     const table = await this.page.waitForSelector(".ant-table");
     const expectedTableDataset = [
       "Laajalahden aukio 31/05/2021 Teljäntie 01/06/2021 2.04 km 8.33 min",
@@ -65,7 +66,7 @@ export class Journeys {
   }
 
   async checkTablePaging() {
-    await this.page.waitForLoadState("networkidle");
+    
     const table = await this.page.waitForSelector(".ant-table");
     // Get the pagination element
     const pagination = await this.page.waitForSelector(".ant-pagination");
@@ -95,7 +96,7 @@ export class Journeys {
   }
 
   async checkNextAndPreviousButton() {
-    await this.page.waitForLoadState("networkidle");
+   
     const table = await this.page.waitForSelector(".ant-table");
 
     // Click on the next button
@@ -153,7 +154,7 @@ export class Journeys {
   }
 
   async checkBackButton() {
-    await this.page.waitForLoadState("networkidle");
+   
     await this.backButton.click();
     const currentUrl = this.page.url();
 
