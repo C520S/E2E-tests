@@ -136,6 +136,14 @@ export class StationListPage {
     expect(tableDataContent).toEqual(expectedTableDataset);
   }
 
+  async checkBackButton() {
+   
+    await this.backButton.click();
+    const currentUrl = this.page.url();
 
+    expect(currentUrl).toBe(
+      "https://panda-helsinki-citybike-website.onrender.com/stationList"
+    );
+  }
   }
   

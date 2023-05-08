@@ -31,8 +31,12 @@ test.describe("Testing of the rendering of the station list page", () => {
     await stationListPage.checkNextAndPreviousButton();
   });
 
-  test.only("Checking the search function", async () => {
+  test("Checking the search function", async () => {
     await stationListPage.checkSearchResult("Golf");
+  });
+
+  test.only("Checking the function of the return button", async () => {
+    await stationListPage.checkBackButton();
   });
 
 });
