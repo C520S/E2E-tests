@@ -14,8 +14,12 @@ test.describe("Testing of the rendering of the station list page", () => {
 
   });
 
-  test.only("Check if the table has  rows", async () => {
+  test("Check if the table has 11 rows", async () => {
      await stationListPage.checkTableElements()
+  });
+
+  test("Checking the data in the table", async () => {
+    await stationListPage.checkTablesContent();
   });
 
 });
