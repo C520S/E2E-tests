@@ -57,7 +57,7 @@ export class Journeys {
                 'Jämeräntaival 31/05/2021 Jämeräntaival 01/06/2021 1.23 km 50.67 min'
               
           ]
-      
+      //extract the table data from the rows and cells of the Ant Design table.
     const tableData = await table.$$eval("tbody tr", (rows) =>
       Array.from(rows, (row) =>
         Array.from(row.querySelectorAll("td"), (cell) => cell.innerText.trim())
@@ -114,13 +114,55 @@ for (const pageNumber of pageNumbers) {
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath);
       }
-    await table.screenshot({ path: `${folderPath}/table_next_page.png` });
+  await table.screenshot({ path: `${folderPath}/table_next_page.png` });
       // Click on the previous button
    await this.page.click('.ant-pagination-prev');
    await this.page.waitForTimeout(1000);
    await table.screenshot({ path: `${folderPath}/table_previous_page.png` });
   }
 
+  async checkSearchResult(searchInpuut: string){
+    await this.page.waitForLoadState("networkidle");
+    await this.searchField.type(searchInpuut)
+    const    expectedTableDataset = [
+      'Töölöntulli 31/05/2021 Pasilan asema 01/06/2021 1.87 km 10.18 min',
+      'Töölönlahdenkatu 31/05/2021 Kansallismuseo 01/06/2021 0.55 km 4.03 min',
+      'Töölöntulli 31/05/2021 Paciuksenkatu 31/05/2021 0.67 km 2.65 min',
+      'Töölönkatu 31/05/2021 Brahen kenttä 31/05/2021 2.08 km 10.47 min',
+      'Töölönlahdenkatu 31/05/2021 Ooppera 31/05/2021 1.68 km 6.55 min',
+      'Töölönkatu 31/05/2021 Liisanpuistikko 31/05/2021 2.58 km 12.93 min',
+      'Töölöntulli 31/05/2021 Brahen kenttä 31/05/2021 2.62 km 10.42 min',
+      'Töölönlahden puisto 31/05/2021 Tyynenmerenkatu 31/05/2021 2.38 km 12.83 min',
+      "Töölönlahden puisto 31/05/2021 Heikkiläntie 31/05/2021 3.74 km 15.20 min",
+      'Töölönkatu 31/05/2021 Albertinkatu 31/05/2021 2.25 km 12.95 min',
+      'Töölöntori 31/05/2021 Kaivopuisto 31/05/2021 5.86 km 26.58 min',
+      'Töölöntulli 31/05/2021 Tenholantie 31/05/2021 1.52 km 7.78 min',
+      'Töölönlahden puisto 31/05/2021 Maistraatintori 31/05/2021 3.13 km 9.93 min',
+      'Töölöntulli 31/05/2021 Laivalahden puistotie 31/05/2021 7.31 km 33.68 min',
+      'Töölöntori 31/05/2021 Erottajan aukio 31/05/2021 1.77 km 8.63 min'
+    ]
+    // keybord event in playwrights
+    await this.page.keyboard.press('Enter')
+    // Wait for the table to update with new data
+    await this.page.waitForTimeout(3000); 
+
+    const table = await this.page.waitForSelector(".ant-table");
+
+
+          //extract the table data from the rows and cells of the Ant Design table.
+          const tableData = await table.$$eval("tbody tr", (rows) =>
+          Array.from(rows, (row) =>
+            Array.from(row.querySelectorAll("td"), (cell) => cell.innerText.trim())
+          )
+        );
+     
+        const tableDataContent = tableData.map(item => item.join(' '));
+
+        expect(tableDataContent).toEqual(expectedTableDataset)
+        
+       
+  }
+   
   
   
 

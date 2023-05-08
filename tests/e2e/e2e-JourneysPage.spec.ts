@@ -26,7 +26,9 @@ test.describe("Testing of the rendering of the Journeyspage", () => {
       test("Check table Next and previous button and visual testing", async () => {
         await journeysPage.checkNextAndPreviousButton()
       });
-
+      test.only("Checking the search function", async () => {
+       await journeysPage.checkSearchResult('Töölön')
+      });
 
    
   });
