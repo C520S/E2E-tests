@@ -3,7 +3,7 @@ import { Journeys } from "../../page-objects/JourneysPage";
 
 
 
-test.describe.parallel("Testing of the rendering of the Journeyspage", () => {
+test.describe("Testing of the rendering of the Journeyspage", () => {
     //ilnitialize thejourneysPage
     let journeysPage:Journeys;
     
