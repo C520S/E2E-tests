@@ -1,4 +1,5 @@
 import { expect, Locator, Page } from "@playwright/test";
+import axios from "axios";
 import fs from "fs";
 const folderPath = " stationListPage-Test-Images";
 
@@ -21,6 +22,7 @@ export class StationListPage {
       "https://panda-helsinki-citybike-website.onrender.com/stationList"
     );
     await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
   }
 
   async checkTableElements() {
@@ -37,18 +39,16 @@ export class StationListPage {
 
   async checkTablesContent() {
     const table = await this.page.waitForSelector(".ant-table");
-    const expectedTableDataset = [
-      "Hanasaari 10 Espoo Hanaholmsstranden 1",
-      "Keilalahti 28 Espoo Kägelviksvägen 2",
-      "Westendinasema 16 Espoo Westendvägen 1",
-      "Golfpolku 16 Espoo Golfstigen 3",
-      "Revontulentie 30 Espoo Norrskensvägen 10",
-      "Sateentie 18 Espoo Regnvägen 2",
-      "Hakalehto 24 Espoo Havsvindsvägen 18",
-      "Oravannahkatori 16 Espoo Gråskinnstorget 1",
-      "Länsituuli 24 Espoo Västanvindsgränden 3",
-      "Tuulimäki 18 Espoo Östanvindsgränden 11",
-    ];
+
+    const dataFromApi = await axios.get(
+      `https://talented-visor-tick.cyclic.app/api/v1/stationList?page=1`
+    );
+    const stationListData = dataFromApi.data.data.stationListData;
+     //Convert data types to strings inside an array
+      const expectedTableDataset= stationListData.map((station:any) =>{
+      return `${station.nimi} ${station.kapasiteet} ${station.kaupunki} ${station.adress}`
+    });
+    
     //extract the table data from the rows and cells of the Ant Design table.
     const tableData = await table.$$eval("tbody tr", (rows) =>
       Array.from(rows, (row) =>
@@ -57,7 +57,9 @@ export class StationListPage {
     );
 
     const tableDataContent = tableData.map((item) => item.join(" "));
-
+  
+     
+    
     expect(tableDataContent).toEqual(expectedTableDataset);
   }
   async checkTablePaging() {
@@ -110,16 +112,25 @@ export class StationListPage {
       path: `${folderPath}/StationListTable_previous_page.png`,
     });
   }
+
   async checkSearchResult(searchInpuut: string) {
     await this.page.waitForLoadState("networkidle");
     await this.searchField.type(searchInpuut);
-    const expectedTableDataset = ["Golfpolku 16 Espoo Golfstigen 3"];
+  
     // keybord event in playwrights
     await this.page.keyboard.press("Enter");
     // Wait for the table to update with new data
     await this.page.waitForTimeout(3000);
 
     const table = await this.page.waitForSelector(".ant-table");
+    const dataFromApi = await axios.get(
+      `https://talented-visor-tick.cyclic.app/api/v1/stationList?page=1&search=${searchInpuut}`
+    );
+    const stationListData = dataFromApi.data.data.stationListData;
+     //Convert data types to strings inside an array
+      const expectedTableDataset= stationListData.map((station:any) =>{
+      return `${station.nimi} ${station.kapasiteet} ${station.kaupunki} ${station.adress}`
+    });
 
     //extract the table data from the rows and cells of the Ant Design table.
     const tableData = await table.$$eval("tbody tr", (rows) =>
@@ -156,5 +167,12 @@ export class StationListPage {
     await this.stationName.click();
     const pageTitle = this.page.locator("h1");
     await expect(pageTitle).toHaveText("Station location on the map");
+  }
+  
+  async checkSingleStationViewMap() {
+    await this.stationName.click();
+    const mapComponent = this.page.locator("#panda-map");
+    await expect(mapComponent).toBeVisible()
+
   }
 }

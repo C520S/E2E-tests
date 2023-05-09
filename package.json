@@ -9,6 +9,7 @@
   "author": "Frank",
   "license": "ISC",
   "dependencies": {
-    "@playwright/test": "^1.33.0"
+    "@playwright/test": "^1.33.0",
+    "axios": "^1.4.0"
   }
 }

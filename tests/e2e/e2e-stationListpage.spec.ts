@@ -42,4 +42,9 @@ test.describe("Testing of the rendering of the station list page", () => {
   test("checking single station view title", async () => {
     await stationListPage.checkSingleStationViewUrl();
   });
+
+
+  test("checking single station view map component", async () => {
+    await stationListPage.checkSingleStationViewMap()
+  });
 });
