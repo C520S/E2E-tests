@@ -15,6 +15,9 @@ export class NotFoundPage {
   constructor(page: Page) {
     this.page = page;
     this.NotFoundPageImg = page.locator('.ant-image-img')
+    this.NotFoundPageTitle = page.locator('h1')
+    this.NotFoundPagePhrase = page.locator('h2')
+    this.homeButton=page.locator('text=Go Home')
    
   }
 
@@ -24,7 +27,33 @@ export class NotFoundPage {
     );
     await this.page.waitForLoadState("networkidle");
   }
-  
+
+  async checkImage(){
+   await expect(this.NotFoundPageImg).toBeVisible();
+  }
+
+  async checkNotFoundPageTitle() {
+    await expect(this.NotFoundPageTitle).toHaveText(
+      "404"
+    );
+  }
+  async checkNotFoundPagePhrase() {
+    await expect(this.NotFoundPagePhrase).toHaveText(
+      "Page Not Found"
+    );
+  }
+
+  async checkNotFoundPageHomeButton() {
+      await  this.homeButton.click()
+      await this.page.waitForTimeout(4000);
+      const currentUrl = this.page.url();
+
+      expect(currentUrl).toBe(
+        "https://panda-helsinki-citybike-website.onrender.com/"
+      );
+    
+  }
+ 
 
    async checkRendering() {
    // Create the folder if it doesn't exist
