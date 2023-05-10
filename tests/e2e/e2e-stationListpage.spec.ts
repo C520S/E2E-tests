@@ -2,7 +2,7 @@ import { test } from "@playwright/test";
 
 import { StationListPage } from "../../page-objects/StationList";
 
-test.describe("Testing of the rendering of the station list page", () => {
+test.describe("Testing of the rendering of the station list and single station view page", () => {
   //ilnitialize the StationListPage
   let stationListPage: StationListPage;
 

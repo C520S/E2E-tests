@@ -2,7 +2,7 @@ import { test } from "@playwright/test";
 import { NotFoundPage } from "../../page-objects/NotFoundpage";
 
 
-test.describe.parallel("Testing of the rendering of the home page", () => {
+test.describe.parallel("Testing of the rendering of the 404 page", () => {
     //ilnitialize the HomePage
     let notFoundPage: NotFoundPage;
     test.beforeEach(async ({ page }) => {
