@@ -40,21 +40,20 @@ test.describe("Testing of the rendering of the station list page", () => {
   });
 
   test("checking single station view title", async () => {
-    await stationListPage.checkSingleStationViewUrl();
+    await stationListPage.checkSingleStationViewtitle();
   });
 
-
   test("checking single station view map component", async () => {
-    await stationListPage.checkSingleStationViewMap()
+    await stationListPage.checkSingleStationViewMap();
   });
 
   test("Checking the function of the return button for a single station", async () => {
-    await stationListPage.checkBackButtonForSingleStationView ()
+    await stationListPage.checkBackButtonForSingleStationView();
   });
   test("Check that the table in the single station view has 13 rows.", async () => {
-    await stationListPage.checkTableElementsForSingleStationView()
+    await stationListPage.checkTableElementsForSingleStationView();
   });
   test("Checking the data of a table on a single station view", async () => {
-    await stationListPage.checkTablesContentForSingleStationView()
+    await stationListPage.checkTablesContentForSingleStationView();
   });
 });
