@@ -54,10 +54,7 @@ export class Journeys {
       return formattedJourney;
     })
    
- 
-    
-    
-    //extract the table data from the rows and cells of the Ant Design table.
+     //extract the table data from the rows and cells of the Ant Design table.
     const tableData = await table.$$eval("tbody tr", (rows) =>
       Array.from(rows, (row) =>
         Array.from(row.querySelectorAll("td"), (cell) => cell.innerText.trim())

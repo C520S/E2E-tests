@@ -18,14 +18,17 @@ export class StationListPage {
   }
 
   async visitStationListPage() {
+
     await this.page.goto(
       "https://panda-helsinki-citybike-website.onrender.com/stationList"
     );
+
     await this.page.waitForLoadState("networkidle");
     await this.page.waitForTimeout(1000);
   }
 
   async checkTableElements() {
+
     const table = await this.page.waitForSelector(".ant-table");
     const trCountHandle = await this.page.evaluateHandle((table) => {
       const rows = table.querySelectorAll("tr");
@@ -38,6 +41,7 @@ export class StationListPage {
   }
 
   async checkTablesContent() {
+
     const table = await this.page.waitForSelector(".ant-table");
 
     const dataFromApi = await axios.get(
@@ -61,6 +65,7 @@ export class StationListPage {
     expect(tableDataContent).toEqual(expectedTableDataset);
   }
   async checkTablePaging() {
+
     const table = await this.page.waitForSelector(".ant-table");
     // Get the pagination element
     const pagination = await this.page.waitForSelector(".ant-pagination");
@@ -90,6 +95,7 @@ export class StationListPage {
   }
 
   async checkNextAndPreviousButton() {
+
     const table = await this.page.waitForSelector(".ant-table");
 
     // Click on the next button
@@ -100,9 +106,11 @@ export class StationListPage {
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath);
     }
+
     await table.screenshot({
       path: `${folderPath}/StationListTable_next_page.png`,
     });
+
     // Click on the previous button
     await this.page.click(".ant-pagination-prev");
     await this.page.waitForTimeout(1000);
@@ -112,6 +120,7 @@ export class StationListPage {
   }
 
   async checkSearchResult(searchInpuut: string) {
+
     await this.page.waitForLoadState("networkidle");
     await this.searchField.type(searchInpuut);
 
@@ -143,6 +152,7 @@ export class StationListPage {
   }
 
   async checkBackButton() {
+
     await this.backButton.click();
     const currentUrl = this.page.url();
 
@@ -152,6 +162,7 @@ export class StationListPage {
   }
 
   async checkSingleStationViewUrl() {
+
     await this.stationName.click();
     await this.page.waitForLoadState("networkidle");
     await this.page.waitForTimeout(1000);
@@ -163,26 +174,35 @@ export class StationListPage {
   }
 
   async checkSingleStationViewtitle() {
+
     await this.stationName.click();
     await this.page.waitForLoadState("networkidle");
     await this.page.waitForTimeout(1000);
+
     const pageTitle = this.page.locator("h2");
+
     await expect(pageTitle).toHaveText("Station location on the map");
   }
 
   async checkSingleStationViewMap() {
+
     await this.stationName.click();
     await this.page.waitForLoadState("networkidle");
     await this.page.waitForTimeout(1000);
+
     const mapComponent = this.page.locator("#panda-map");
+
     await expect(mapComponent).toBeVisible();
   }
 
   async checkBackButtonForSingleStationView() {
+
     await this.stationName.click();
     await this.page.waitForLoadState("networkidle");
     await this.page.waitForTimeout(1000);
+
     await this.backButton.click();
+
     const currentUrl = this.page.url();
 
     expect(currentUrl).toBe(
@@ -191,15 +211,19 @@ export class StationListPage {
   }
 
   async checkTableElementsForSingleStationView() {
+
     await this.stationName.click();
     await this.page.waitForLoadState("networkidle");
     await this.page.waitForTimeout(1000);
+
     const table = await this.page.waitForSelector(".ant-table");
     const trCountHandle = await this.page.evaluateHandle((table) => {
       const rows = table.querySelectorAll("tr");
       return rows.length;
     }, table);
+
     const trCount = await trCountHandle.jsonValue();
+
     expect(trCount).toEqual(13);
   }
 
@@ -207,6 +231,7 @@ export class StationListPage {
     await this.stationName.click();
     await this.page.waitForLoadState("networkidle");
     await this.page.waitForTimeout(1000);
+    
     const table = await this.page.waitForSelector(".ant-table");
 
     const dataFromApi = await axios.get(

@@ -22,28 +22,36 @@ export class NotFoundPage {
   }
 
   async visit404page() {
+
     await this.page.goto(
       "https://panda-helsinki-citybike-website.onrender.com/404"
     );
+
     await this.page.waitForLoadState("networkidle");
   }
 
   async checkImage(){
+
    await expect(this.NotFoundPageImg).toBeVisible();
+
   }
 
   async checkNotFoundPageTitle() {
+
     await expect(this.NotFoundPageTitle).toHaveText(
       "404"
     );
   }
+
   async checkNotFoundPagePhrase() {
+
     await expect(this.NotFoundPagePhrase).toHaveText(
       "Page Not Found"
     );
   }
 
   async checkNotFoundPageHomeButton() {
+    
       await  this.homeButton.click()
       await this.page.waitForTimeout(4000);
       const currentUrl = this.page.url();
