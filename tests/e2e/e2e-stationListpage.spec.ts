@@ -47,4 +47,14 @@ test.describe("Testing of the rendering of the station list page", () => {
   test("checking single station view map component", async () => {
     await stationListPage.checkSingleStationViewMap()
   });
+
+  test("Checking the function of the return button for a single station", async () => {
+    await stationListPage.checkBackButtonForSingleStationView ()
+  });
+  test("Check that the table in the single station view has 13 rows.", async () => {
+    await stationListPage.checkTableElementsForSingleStationView()
+  });
+  test("Checking the data of a table on a single station view", async () => {
+    await stationListPage.checkTablesContentForSingleStationView()
+  });
 });

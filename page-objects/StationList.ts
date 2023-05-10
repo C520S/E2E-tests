@@ -14,7 +14,7 @@ export class StationListPage {
     this.page = page;
     this.searchField = page.locator("#my-search");
     this.backButton = page.locator("text=back");
-    this.stationName = page.locator("text=Golfpolku");
+    this.stationName = page.locator("text=Itäportti");
   }
 
   async visitStationListPage() {
@@ -155,24 +155,101 @@ export class StationListPage {
 
   async checkSingleStationViewUrl() {
     await this.stationName.click();
-
+    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
     const currentUrl = this.page.url();
 
     expect(currentUrl).toBe(
-      "https://panda-helsinki-citybike-website.onrender.com/stationList/Golfpolku"
+      "https://panda-helsinki-citybike-website.onrender.com/stationList/Itäportti"
     );
   }
 
   async checkSingleStationViewtitle() {
     await this.stationName.click();
+    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
     const pageTitle = this.page.locator("h1");
     await expect(pageTitle).toHaveText("Station location on the map");
   }
   
   async checkSingleStationViewMap() {
     await this.stationName.click();
+    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
     const mapComponent = this.page.locator("#panda-map");
     await expect(mapComponent).toBeVisible()
 
   }
+
+  async checkBackButtonForSingleStationView() {
+    await this.stationName.click();
+    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
+    await this.backButton.click();
+    const currentUrl = this.page.url();
+
+    expect(currentUrl).toBe(
+      "https://panda-helsinki-citybike-website.onrender.com/stationList"
+    );
+  }
+
+  async checkTableElementsForSingleStationView() {
+    await this.stationName.click();
+    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
+    const table = await this.page.waitForSelector(".ant-table");
+    const trCountHandle = await this.page.evaluateHandle((table) => {
+      const rows = table.querySelectorAll("tr");
+      return rows.length;
+    }, table);
+    const trCount = await trCountHandle.jsonValue();
+    expect(trCount).toEqual(13);
+  }
+  
+  async checkTablesContentForSingleStationView() {
+
+    await this.stationName.click();
+    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForTimeout(1000);
+    const table = await this.page.waitForSelector(".ant-table");
+
+    const dataFromApi = await axios.get(
+      `https://talented-visor-tick.cyclic.app/api/v1/stationList/Itäportti`
+    );
+    const singleStationData = dataFromApi.data.singleStationViewData;
+
+     //Convert data types to strings inside an array
+     const expectedTableDataset = [
+      `Station identification code ${singleStationData[0].id}`,
+      `Station name ${ singleStationData[0].nimi}`,
+      `Station address ${ singleStationData[0].osoite}`,
+      `City ${ singleStationData[0].kaupunki}`,
+      `Operators ${ singleStationData[0].operaattor}`,
+      `Bicycle Capacity ${singleStationData[0].kapasiteet}`,
+      `Average distance from station ${(singleStationData[1].averageDistanceofstationDeparture / 1000).toFixed(2)} km`,
+      `Average distance to station ${(singleStationData[1].averageDistanceofstationArrival / 1000).toFixed(2)} km`,
+      `Total number of journeys starting from the station ${singleStationData[1].stationDepartureNum}`,
+      `Total number of journeys ending at the station ${singleStationData[1].stationArrivalNum}`,
+      `Top 5 most popular return stations for journeys starting from the station ${singleStationData[1].popular5start}`,
+      `Top 5 most popular departure stations for journeys ending at the station ${singleStationData[1].popular5end}`
+    ];
+   
+    
+    
+    //extract the table data from the rows and cells of the Ant Design table.
+    const tableData = await table.$$eval("tbody tr", (rows) =>
+      Array.from(rows, (row) =>
+        Array.from(row.querySelectorAll("td"), (cell) => cell.innerText.trim())
+      )
+    );
+
+    const tableDataContent = tableData.map((item) => item.join(" "));
+ 
+    
+     
+    
+    expect(tableDataContent).toEqual(expectedTableDataset);
+  }
+
+
 }
