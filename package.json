@@ -4,7 +4,8 @@
   "description": "End-to-end testing of the panda website",
   "main": "index.js",
   "scripts": {
-    "test:e2e": "playwright test --config=e2e.config.ts --project=Chromium --headed"
+    "test:e2e": "playwright test --config=e2e.config.ts --project=Chromium",
+    "test:e2eWithBrowser": "playwright test --config=e2e.config.ts --project=Chromium --headed"
   },
   "author": "Frank",
   "license": "ISC",
