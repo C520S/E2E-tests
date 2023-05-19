@@ -14,7 +14,7 @@ export class StationListPage {
     this.page = page;
     this.searchField = page.locator("#my-search");
     this.backButton = page.locator("text=back");
-    this.stationName = page.locator("text=Mankkaanlaaksontie");
+    this.stationName = page.locator("text=Golfpolku");
   }
 
   async visitStationListPage() {
@@ -169,7 +169,7 @@ export class StationListPage {
     const currentUrl = this.page.url();
 
     expect(currentUrl).toBe(
-      "https://panda-helsinki-citybike-website.onrender.com/stationList/Mankkaanlaaksontie"
+      "https://panda-helsinki-citybike-website.onrender.com/stationList/Golfpolku"
     );
   }
 
@@ -235,7 +235,7 @@ export class StationListPage {
     const table = await this.page.waitForSelector(".ant-table");
 
     const dataFromApi = await axios.get(
-      `https://talented-visor-tick.cyclic.app/api/v1/stationList/Mankkaanlaaksontie`
+      `https://talented-visor-tick.cyclic.app/api/v1/stationList/Golfpolku`
     );
     const singleStationData = dataFromApi.data.singleStationViewData;
 
